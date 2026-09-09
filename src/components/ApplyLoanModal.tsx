@@ -42,6 +42,15 @@ export default function ApplyLoanModal({ isOpen, onClose }: ApplyLoanModalProps)
         throw new Error(data.error || 'Failed to submit application.');
       }
 
+      // Trigger Meta Pixel Lead Conversion Event
+      if (typeof window !== 'undefined' && (window as any).fbq) {
+        try {
+          (window as any).fbq('track', 'Lead');
+        } catch (e) {
+          console.error('Meta pixel lead event error:', e);
+        }
+      }
+
       setSuccessData({ redirectUrl: data.redirectUrl });
       setLoading(false);
 
