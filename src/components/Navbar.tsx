@@ -12,11 +12,11 @@ export default function Navbar({ onApplyClick }: NavbarProps) {
   return (
     <header className="sticky top-0 z-40 bg-white border-b border-slate-200/80 text-slate-900 shadow-xs">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 sm:h-20 flex items-center justify-between">
-        {/* Official Bajaj Markets Logo */}
+        {/* Official Bajaj Markets Ribbon Logo */}
         <Link href="/" className="flex items-center group">
           <div className="relative w-36 sm:w-48 h-10 sm:h-14">
             <Image
-              src="/bajaj_official_logo.png"
+              src="/bajaj_ribbon_logo.png"
               alt="Bajaj Markets Logo"
               fill
               className="object-contain object-left group-hover:scale-105 transition-transform duration-200"
