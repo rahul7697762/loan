@@ -12,7 +12,6 @@ import {
   Download,
   Search,
   Trash2,
-  Database,
   Phone,
   Calendar,
   CheckCircle2,
@@ -40,7 +39,6 @@ export default function AdminDashboard() {
   const [leads, setLeads] = useState<Lead[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [loadingLeads, setLoadingLeads] = useState(true);
-  const [isSupabaseConnected, setIsSupabaseConnected] = useState(false);
 
   // Fetch settings & leads on mount
   useEffect(() => {
@@ -60,7 +58,6 @@ export default function AdminDashboard() {
       if (settingsData.success) {
         setRedirectUrl(settingsData.settings.redirect_url);
         setNewRedirectUrl(settingsData.settings.redirect_url);
-        setIsSupabaseConnected(settingsData.isSupabaseConnected);
       }
 
       // 2. Fetch leads list
@@ -157,33 +154,20 @@ export default function AdminDashboard() {
   );
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 selection:bg-emerald-500 selection:text-slate-950">
+    <div className="min-h-screen bg-slate-950 text-slate-100 selection:bg-blue-600 selection:text-white">
       {/* Top Navbar */}
       <header className="bg-slate-900 border-b border-slate-800 sticky top-0 z-30">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <Link href="/" className="flex items-center gap-2">
-              <div className="w-9 h-9 rounded-xl bg-emerald-500 flex items-center justify-center text-slate-950 font-bold">
+              <div className="w-9 h-9 rounded-xl bg-[#0066c0] flex items-center justify-center text-white font-bold">
                 <ShieldCheck className="w-5 h-5" />
               </div>
-              <span className="font-bold text-lg text-white">FlexiLoan Admin</span>
+              <span className="font-bold text-lg text-white">Admin Panel</span>
             </Link>
-            <span className="hidden sm:inline-block text-[11px] font-medium text-slate-400 bg-slate-800 px-2.5 py-1 rounded-full border border-slate-700">
-              Management Portal
-            </span>
           </div>
 
           <div className="flex items-center gap-4">
-            <div className="hidden md:flex items-center gap-2 text-xs text-slate-400 bg-slate-950 px-3 py-1.5 rounded-lg border border-slate-800">
-              <Database className={`w-3.5 h-3.5 ${isSupabaseConnected ? 'text-emerald-400' : 'text-amber-400'}`} />
-              <span>
-                Supabase:{' '}
-                <strong className={isSupabaseConnected ? 'text-emerald-400' : 'text-amber-400'}>
-                  {isSupabaseConnected ? 'Connected Live' : 'Dev Memory Fallback'}
-                </strong>
-              </span>
-            </div>
-
             <button
               onClick={handleLogout}
               className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-red-400 hover:bg-red-500/10 hover:border-red-500/30 rounded-lg border border-slate-800 transition-colors"
@@ -198,9 +182,9 @@ export default function AdminDashboard() {
       {/* Main Dashboard Layout */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
         {/* STATS OVERVIEW */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
           <div className="bg-slate-900 border border-slate-800 rounded-2xl p-5 flex items-center gap-4 shadow-lg">
-            <div className="w-12 h-12 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center shrink-0">
+            <div className="w-12 h-12 rounded-xl bg-blue-500/10 text-blue-400 flex items-center justify-center shrink-0">
               <Phone className="w-6 h-6" />
             </div>
             <div>
@@ -214,21 +198,9 @@ export default function AdminDashboard() {
               <TrendingUp className="w-6 h-6" />
             </div>
             <div>
-              <span className="text-xs text-slate-400 block font-medium">Redirect Destination</span>
-              <span className="text-sm font-semibold text-emerald-400 truncate max-w-[200px] block">
+              <span className="text-xs text-slate-400 block font-medium">Active Target Redirect URL</span>
+              <span className="text-sm font-semibold text-blue-400 truncate max-w-[280px] block">
                 {redirectUrl || 'Loading...'}
-              </span>
-            </div>
-          </div>
-
-          <div className="bg-slate-900 border border-slate-800 rounded-2xl p-5 flex items-center gap-4 shadow-lg">
-            <div className="w-12 h-12 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center shrink-0">
-              <CheckCircle2 className="w-6 h-6" />
-            </div>
-            <div>
-              <span className="text-xs text-slate-400 block font-medium">Database Status</span>
-              <span className="text-sm font-bold text-slate-200">
-                {isSupabaseConnected ? 'Supabase Active' : 'Demo Fallback Active'}
               </span>
             </div>
           </div>
@@ -237,13 +209,13 @@ export default function AdminDashboard() {
         {/* SECTION 1: REDIRECT URL EDITOR */}
         <section className="bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-8 shadow-xl relative overflow-hidden">
           <div className="flex items-center gap-3 mb-4">
-            <div className="w-10 h-10 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center">
+            <div className="w-10 h-10 rounded-xl bg-blue-500/10 text-blue-400 flex items-center justify-center">
               <Link2 className="w-5 h-5" />
             </div>
             <div>
               <h2 className="text-xl font-bold text-white">Target Redirect Link Setting</h2>
               <p className="text-xs text-slate-400">
-                After users submit their phone number on the loan page, they will automatically be redirected to this URL.
+                After users submit their phone number, they will automatically be redirected to this URL.
               </p>
             </div>
           </div>
@@ -260,14 +232,14 @@ export default function AdminDashboard() {
                   value={newRedirectUrl}
                   onChange={(e) => setNewRedirectUrl(e.target.value)}
                   required
-                  className="flex-grow px-4 py-3.5 bg-slate-950 border border-slate-800 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 font-mono text-sm"
+                  className="flex-grow px-4 py-3.5 bg-slate-950 border border-slate-800 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 font-mono text-sm"
                 />
 
                 <div className="flex gap-2">
                   <button
                     type="submit"
                     disabled={savingUrl}
-                    className="px-6 py-3.5 bg-gradient-to-r from-emerald-400 to-teal-400 hover:from-emerald-300 hover:to-teal-300 text-slate-950 font-bold text-sm rounded-xl shadow-lg shadow-emerald-500/20 transition-all flex items-center gap-2 cursor-pointer disabled:opacity-50"
+                    className="px-6 py-3.5 bg-[#0066c0] hover:bg-[#00529b] text-white font-bold text-sm rounded-xl shadow-lg shadow-blue-600/20 transition-all flex items-center gap-2 cursor-pointer disabled:opacity-50"
                   >
                     {savingUrl ? (
                       <Loader2 className="w-4 h-4 animate-spin" />
@@ -317,7 +289,7 @@ export default function AdminDashboard() {
             <div>
               <h2 className="text-xl font-bold text-white">Submitted Loan Applications</h2>
               <p className="text-xs text-slate-400">
-                Live entries of all phone numbers saved into the database.
+                Live entries of all phone numbers saved into your Supabase database.
               </p>
             </div>
 
@@ -330,7 +302,7 @@ export default function AdminDashboard() {
                   placeholder="Search phone number..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full pl-9 pr-4 py-2 bg-slate-950 border border-slate-800 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-none focus:border-emerald-500"
+                  className="w-full pl-9 pr-4 py-2 bg-slate-950 border border-slate-800 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-none focus:border-blue-500"
                 />
               </div>
 
@@ -338,7 +310,7 @@ export default function AdminDashboard() {
               <button
                 onClick={fetchData}
                 title="Refresh leads"
-                className="p-2.5 bg-slate-950 hover:bg-slate-800 text-slate-400 hover:text-white rounded-xl border border-slate-800 transition-colors"
+                className="p-2.5 bg-slate-950 hover:bg-slate-800 text-slate-400 hover:text-white rounded-xl border border-slate-800 transition-colors cursor-pointer"
               >
                 <RefreshCw className={`w-4 h-4 ${loadingLeads ? 'animate-spin' : ''}`} />
               </button>
@@ -349,7 +321,7 @@ export default function AdminDashboard() {
                 disabled={leads.length === 0}
                 className="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold text-xs rounded-xl border border-slate-700 flex items-center gap-1.5 transition-colors disabled:opacity-50 cursor-pointer"
               >
-                <Download className="w-4 h-4 text-emerald-400" />
+                <Download className="w-4 h-4 text-blue-400" />
                 <span>Export CSV</span>
               </button>
             </div>
@@ -372,7 +344,7 @@ export default function AdminDashboard() {
                   <tr>
                     <td colSpan={5} className="py-12 text-center text-slate-500">
                       <div className="flex flex-col items-center justify-center gap-2">
-                        <Loader2 className="w-6 h-6 animate-spin text-emerald-400" />
+                        <Loader2 className="w-6 h-6 animate-spin text-blue-400" />
                         <span>Loading submitted applications...</span>
                       </div>
                     </td>
@@ -380,14 +352,14 @@ export default function AdminDashboard() {
                 ) : filteredLeads.length === 0 ? (
                   <tr>
                     <td colSpan={5} className="py-12 text-center text-slate-500 font-medium">
-                      No loan applications found matching your criteria.
+                      No submitted applications found.
                     </td>
                   </tr>
                 ) : (
                   filteredLeads.map((lead, idx) => (
                     <tr key={lead.id} className="hover:bg-slate-800/40 transition-colors">
                       <td className="py-4 px-4 font-mono text-slate-500">{idx + 1}</td>
-                      <td className="py-4 px-4 font-semibold text-emerald-400 text-sm">
+                      <td className="py-4 px-4 font-semibold text-blue-400 text-sm">
                         {lead.phone_number}
                       </td>
                       <td className="py-4 px-4 text-slate-300">
@@ -417,31 +389,6 @@ export default function AdminDashboard() {
             </table>
           </div>
         </section>
-
-        {/* SECTION 3: SUPABASE INSTRUCTIONS BOX */}
-        {!isSupabaseConnected && (
-          <section className="bg-amber-500/10 border border-amber-500/30 rounded-3xl p-6 text-amber-200 space-y-3">
-            <div className="flex items-center gap-2 font-bold text-sm text-amber-300">
-              <Database className="w-5 h-5" />
-              <span>Connect Your Real Supabase Project</span>
-            </div>
-            <p className="text-xs text-slate-300 leading-relaxed">
-              Currently running in memory preview mode. To link your live Supabase database, copy the SQL script from{' '}
-              <code className="text-emerald-400 bg-slate-950 px-1.5 py-0.5 rounded font-mono">
-                supabase_schema.sql
-              </code>{' '}
-              into your Supabase SQL Editor and update your credentials in{' '}
-              <code className="text-emerald-400 bg-slate-950 px-1.5 py-0.5 rounded font-mono">
-                .env.local
-              </code>
-              :
-            </p>
-            <div className="bg-slate-950 p-3 rounded-xl border border-slate-800 text-[11px] font-mono text-slate-300 overflow-x-auto">
-              <div>NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co</div>
-              <div>NEXT_PUBLIC_SUPABASE_ANON_KEY=your-actual-anon-key</div>
-            </div>
-          </section>
-        )}
       </main>
     </div>
   );

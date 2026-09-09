@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { supabase, isSupabaseConfigured, getMockLeads } from '@/lib/supabase';
+import { supabase } from '@/lib/supabase';
 
 // GET all submitted leads
 export async function GET(req: NextRequest) {
@@ -9,27 +9,19 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 });
     }
 
-    let leads = [];
+    const { data, error } = await supabase
+      .from('applications')
+      .select('*')
+      .order('created_at', { ascending: false });
 
-    if (isSupabaseConfigured() && supabase) {
-      const { data, error } = await supabase
-        .from('applications')
-        .select('*')
-        .order('created_at', { ascending: false });
-
-      if (error) {
-        console.error('Error fetching leads from Supabase:', error);
-        return NextResponse.json({ success: false, error: error.message }, { status: 500 });
-      }
-      leads = data || [];
-    } else {
-      leads = getMockLeads();
+    if (error) {
+      console.error('Error fetching leads from Supabase:', error);
+      return NextResponse.json({ success: false, error: error.message }, { status: 500 });
     }
 
     return NextResponse.json({
       success: true,
-      leads,
-      isSupabaseConnected: isSupabaseConfigured(),
+      leads: data || [],
     });
   } catch (err: any) {
     return NextResponse.json({ success: false, error: err.message }, { status: 500 });
@@ -51,12 +43,10 @@ export async function DELETE(req: NextRequest) {
       return NextResponse.json({ success: false, error: 'Missing lead ID' }, { status: 400 });
     }
 
-    if (isSupabaseConfigured() && supabase) {
-      const { error } = await supabase.from('applications').delete().eq('id', id);
+    const { error } = await supabase.from('applications').delete().eq('id', id);
 
-      if (error) {
-        return NextResponse.json({ success: false, error: error.message }, { status: 500 });
-      }
+    if (error) {
+      return NextResponse.json({ success: false, error: error.message }, { status: 500 });
     }
 
     return NextResponse.json({ success: true, message: 'Lead deleted successfully' });
