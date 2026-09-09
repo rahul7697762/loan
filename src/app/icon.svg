@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="32" height="32">
+  <rect width="100" height="100" rx="20" fill="#0066C0"/>
+  <!-- Bajaj B Ribbon Symbol -->
+  <path d="M 25 20 C 70 20, 90 38, 60 52 C 90 66, 70 85, 25 85 C 52 78, 70 66, 48 52 C 70 38, 52 26, 25 20 Z" fill="#FFFFFF"/>
+</svg>

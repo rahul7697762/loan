@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 100" width="160" height="50">
+  <rect width="130" height="100" fill="#0066C0"/>
+  <!-- Bajaj B Ribbon Symbol -->
+  <path d="M 40 18 C 75 18, 95 32, 70 50 C 95 68, 75 82, 40 82 C 60 76, 75 66, 52 50 C 75 34, 60 24, 40 18 Z" fill="#FFFFFF"/>
+  <path d="M 45 42 C 65 30, 85 45, 65 58 Z" fill="#FFFFFF" opacity="0.9"/>
+  <!-- BAJAJ Text -->
+  <text x="65" y="92" font-family="Arial, Helvetica, sans-serif" font-weight="900" font-size="19" fill="#FFFFFF" text-anchor="middle" letter-spacing="1">BAJAJ</text>
+  <!-- MARKETS Text -->
+  <text x="145" y="62" font-family="Arial, Helvetica, sans-serif" font-weight="900" font-size="34" fill="#0066C0" letter-spacing="2">MARKETS</text>
+</svg>
