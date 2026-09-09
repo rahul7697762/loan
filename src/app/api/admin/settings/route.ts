@@ -1,19 +1,21 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { supabase } from '@/lib/supabase';
+import { supabase, isSupabaseConfigured } from '@/lib/supabase';
 
 // GET settings
 export async function GET(req: NextRequest) {
   try {
     let redirectUrl = 'https://example.com/thank-you';
 
-    const { data, error } = await supabase
-      .from('settings')
-      .select('value')
-      .eq('key', 'redirect_url')
-      .maybeSingle();
+    if (isSupabaseConfigured() && supabase) {
+      const { data } = await supabase
+        .from('settings')
+        .select('value')
+        .eq('key', 'redirect_url')
+        .maybeSingle();
 
-    if (data?.value) {
-      redirectUrl = data.value;
+      if (data?.value) {
+        redirectUrl = data.value;
+      }
     }
 
     return NextResponse.json({
@@ -48,6 +50,13 @@ export async function POST(req: NextRequest) {
     } catch {
       return NextResponse.json(
         { success: false, error: 'Invalid URL format. Please include http:// or https://' },
+        { status: 400 }
+      );
+    }
+
+    if (!isSupabaseConfigured() || !supabase) {
+      return NextResponse.json(
+        { success: false, error: 'Supabase credentials not configured in Vercel environment variables.' },
         { status: 400 }
       );
     }

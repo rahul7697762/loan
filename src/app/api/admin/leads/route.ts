@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { supabase } from '@/lib/supabase';
+import { supabase, isSupabaseConfigured } from '@/lib/supabase';
 
 // GET all submitted leads
 export async function GET(req: NextRequest) {
@@ -7,6 +7,14 @@ export async function GET(req: NextRequest) {
     const session = req.cookies.get('admin_session')?.value;
     if (session !== 'authenticated') {
       return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 });
+    }
+
+    if (!isSupabaseConfigured() || !supabase) {
+      return NextResponse.json({
+        success: true,
+        leads: [],
+        warning: 'Supabase credentials not configured in Vercel environment variables.',
+      });
     }
 
     const { data, error } = await supabase
@@ -24,7 +32,8 @@ export async function GET(req: NextRequest) {
       leads: data || [],
     });
   } catch (err: any) {
-    return NextResponse.json({ success: false, error: err.message }, { status: 500 });
+    console.error('API /api/admin/leads error:', err);
+    return NextResponse.json({ success: false, error: err.message || 'Server error' }, { status: 500 });
   }
 }
 
@@ -41,6 +50,10 @@ export async function DELETE(req: NextRequest) {
 
     if (!id) {
       return NextResponse.json({ success: false, error: 'Missing lead ID' }, { status: 400 });
+    }
+
+    if (!isSupabaseConfigured() || !supabase) {
+      return NextResponse.json({ success: false, error: 'Supabase not configured' }, { status: 400 });
     }
 
     const { error } = await supabase.from('applications').delete().eq('id', id);

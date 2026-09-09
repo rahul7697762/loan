@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { supabase } from '@/lib/supabase';
+import { supabase, isSupabaseConfigured } from '@/lib/supabase';
 
 export async function POST(req: NextRequest) {
   try {
@@ -18,24 +18,26 @@ export async function POST(req: NextRequest) {
 
     let targetRedirectUrl = 'https://example.com/thank-you';
 
-    // 1. Save application into Supabase
-    const { error: insertError } = await supabase
-      .from('applications')
-      .insert([{ phone_number: cleanedPhone, user_agent: userAgent, status: 'pending' }]);
+    if (isSupabaseConfigured() && supabase) {
+      // 1. Save application into Supabase
+      const { error: insertError } = await supabase
+        .from('applications')
+        .insert([{ phone_number: cleanedPhone, user_agent: userAgent, status: 'pending' }]);
 
-    if (insertError) {
-      console.error('Supabase application insert error:', insertError);
-    }
+      if (insertError) {
+        console.error('Supabase application insert error:', insertError);
+      }
 
-    // 2. Fetch redirect_url setting from Supabase
-    const { data: settingData } = await supabase
-      .from('settings')
-      .select('value')
-      .eq('key', 'redirect_url')
-      .maybeSingle();
+      // 2. Fetch redirect_url setting from Supabase
+      const { data: settingData } = await supabase
+        .from('settings')
+        .select('value')
+        .eq('key', 'redirect_url')
+        .maybeSingle();
 
-    if (settingData?.value) {
-      targetRedirectUrl = settingData.value;
+      if (settingData?.value) {
+        targetRedirectUrl = settingData.value;
+      }
     }
 
     return NextResponse.json({
