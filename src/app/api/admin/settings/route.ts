@@ -1,20 +1,29 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { supabase, isSupabaseConfigured } from '@/lib/supabase';
 
-// GET settings
+// GET settings (Admin authenticated)
 export async function GET(req: NextRequest) {
   try {
+    const session = req.cookies.get('admin_session')?.value;
+    if (session !== 'authenticated') {
+      return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 });
+    }
+
     let redirectUrl = 'https://example.com/thank-you';
 
     if (isSupabaseConfigured() && supabase) {
-      const { data } = await supabase
-        .from('settings')
-        .select('value')
-        .eq('key', 'redirect_url')
-        .maybeSingle();
+      try {
+        const { data } = await supabase
+          .from('settings')
+          .select('value')
+          .eq('key', 'redirect_url')
+          .maybeSingle();
 
-      if (data?.value) {
-        redirectUrl = data.value;
+        if (data?.value) {
+          redirectUrl = data.value;
+        }
+      } catch (e) {
+        console.error('Settings query failed:', e);
       }
     }
 
@@ -25,7 +34,10 @@ export async function GET(req: NextRequest) {
       },
     });
   } catch (err: any) {
-    return NextResponse.json({ success: false, error: err.message }, { status: 500 });
+    return NextResponse.json({
+      success: true,
+      settings: { redirect_url: 'https://example.com/thank-you' },
+    });
   }
 }
 
