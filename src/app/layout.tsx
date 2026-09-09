@@ -5,8 +5,9 @@ import './globals.css';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'FlexiLoan - Instant Credit & Quick Loans',
-  description: 'Apply for instant credit and digital loans with quick mobile verification.',
+  title: 'Bajaj Referral Partner - Instant Personal Loans Up To ₹50 Lakhs',
+  description:
+    'Authorized Bajaj Referral Partner. Apply for instant personal loans up to ₹50 Lakhs with quick mobile verification.',
   icons: {
     icon: '/icon.svg',
     shortcut: '/icon.svg',
@@ -21,7 +22,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className="h-full antialiased">
-      <body className={`${inter.className} min-h-full bg-[#faf9f9] text-slate-900 flex flex-col`}>
+      <body className={`${inter.className} min-h-full bg-[#0042b3] text-white flex flex-col`}>
         {children}
       </body>
     </html>
