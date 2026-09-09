@@ -13,7 +13,7 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({
         success: true,
         leads: [],
-        message: 'Supabase environment variables not configured in Vercel. Please set NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY.',
+        warning: 'Supabase credentials not configured in Vercel environment variables.',
       });
     }
 
@@ -24,11 +24,7 @@ export async function GET(req: NextRequest) {
 
     if (error) {
       console.error('Error fetching leads from Supabase:', error);
-      return NextResponse.json({
-        success: true,
-        leads: [],
-        error: error.message,
-      });
+      return NextResponse.json({ success: false, error: error.message }, { status: 500 });
     }
 
     return NextResponse.json({
@@ -36,12 +32,8 @@ export async function GET(req: NextRequest) {
       leads: data || [],
     });
   } catch (err: any) {
-    console.error('API /api/admin/leads exception:', err);
-    return NextResponse.json({
-      success: true,
-      leads: [],
-      error: 'Database connection failed or timed out. Check your Supabase URL in Vercel settings.',
-    });
+    console.error('API /api/admin/leads error:', err);
+    return NextResponse.json({ success: false, error: err.message || 'Server error' }, { status: 500 });
   }
 }
 
@@ -61,7 +53,7 @@ export async function DELETE(req: NextRequest) {
     }
 
     if (!isSupabaseConfigured() || !supabase) {
-      return NextResponse.json({ success: false, error: 'Supabase credentials not configured in Vercel.' }, { status: 400 });
+      return NextResponse.json({ success: false, error: 'Supabase not configured' }, { status: 400 });
     }
 
     const { error } = await supabase.from('applications').delete().eq('id', id);
